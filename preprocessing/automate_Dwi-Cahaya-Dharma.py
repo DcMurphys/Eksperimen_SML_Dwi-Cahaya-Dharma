@@ -98,7 +98,7 @@ Jika dataset berupa unstructured data, silakan sesuaikan dengan format seperti k
 
 """
 # Mengambil file dataset 'telco' untuk disimpan sebagai dataframe 'df_churn'
-file_path = "../dataset_raw/telco.csv"
+file_path = "dataset_raw/telco.csv"
 
 df_churn = pd.read_csv(file_path)
 
@@ -743,8 +743,9 @@ def save_to_csv(data, file_path):
 
 
 # Menyiapkan direktori file untuk menyimpan dataframe ke dalam file .csv
-train_pca_file = "dataset_preprocessed/train_pca.csv"
-test_pca_file = "dataset_preprocessed/test_pca.csv"
+train_pca_file = "preprocessing/dataset_preprocessed/train_pca.csv"
+test_pca_file = "preprocessing/dataset_preprocessed/test_pca.csv"
+
 # Menyimpan dataframe `df_train_pca` dan `df_test_pca` sebagai file .csv
 save_to_csv(df_train_pca, train_pca_file)
 save_to_csv(df_test_pca, test_pca_file)
