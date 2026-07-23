@@ -29,3 +29,15 @@ jobs:
 
     - name: 4) Run preprocessing script file 
       run: python preprocessing/automate_Dwi-Cahaya-Dharma.py 
+
+    - name: 5) Commit and push processed files from preprocessing script file
+      run: | 
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+
+        git add preprocessing/encoder/
+        git add preprocessing/scaler/
+        git add preprocessing/pca/
+        git add preprocessing/telco_preprocessing/
+
+        git diff --quiet && git diff --staged --quiet || (git commit -m "chore(automated): update preprocessed dataset & artifacts [skip ci]" && git push)
