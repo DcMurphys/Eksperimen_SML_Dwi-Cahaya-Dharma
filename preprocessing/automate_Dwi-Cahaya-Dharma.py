@@ -73,7 +73,6 @@ Pada tahap ini, Anda perlu mengimpor beberapa pustaka (library) Python yang dibu
 
 # Import library yang diperlukan
 # Library pengolahan & visualisasi data
-import gdown
 import zipfile
 import pandas as pd
 import matplotlib.pyplot as plt
