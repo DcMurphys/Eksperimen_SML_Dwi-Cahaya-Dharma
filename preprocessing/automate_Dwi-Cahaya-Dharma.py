@@ -102,7 +102,7 @@ Jika dataset berupa unstructured data, silakan sesuaikan dengan format seperti k
 """
 
 # Mengambil file dataset 'telco' untuk disimpan sebagai dataframe 'df_churn'
-file_path = "../dataset_raw/telco.csv"
+file_path = "dataset_raw/telco.csv"
 
 df_churn = pd.read_csv(file_path)
 
