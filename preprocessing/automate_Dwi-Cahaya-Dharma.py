@@ -73,7 +73,7 @@ Pada tahap ini, Anda perlu mengimpor beberapa pustaka (library) Python yang dibu
 
 # Import library yang diperlukan
 # Library pengolahan & visualisasi data
-import zipfile
+from IPython.display import display
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -81,7 +81,6 @@ import seaborn as sns
 # Library transformasi data
 import numpy as np
 import joblib
-from scipy import stats
 from scipy.stats import chi2_contingency, randint
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
@@ -103,7 +102,7 @@ Jika dataset berupa unstructured data, silakan sesuaikan dengan format seperti k
 """
 
 # Mengambil file dataset 'telco' untuk disimpan sebagai dataframe 'df_churn'
-file_path = "dataset_raw/telco.csv"
+file_path = "../dataset_raw/telco.csv"
 
 df_churn = pd.read_csv(file_path)
 
