@@ -1,90 +1,89 @@
-#!/usr/bin/env python
-# coding: utf-8
+# -*- coding: utf-8 -*-
+"""Eksperimen MSML_Telco Customer Churn
 
-# # **1. Perkenalan Dataset**
-# 
+# **1. Perkenalan Dataset**
 
-# Tahap pertama, Anda harus mencari dan menggunakan dataset dengan ketentuan sebagai berikut:
-# 
-# 1. **Sumber Dataset**:  
-#    Dataset dapat diperoleh dari berbagai sumber, seperti public repositories (*Kaggle*, *UCI ML Repository*, *Open Data*) atau data primer yang Anda kumpulkan sendiri.
-# 
+Tahap pertama, Anda harus mencari dan menggunakan dataset dengan ketentuan sebagai berikut:
 
-# Untuk proyek **Customer Churn Analytics** ini, dataset yang digunakan adalah **Telco customer churn (11.1.3+)** dari Al Fath Terry, yang filenya bisa di-download secara langsung dari Kaggle melalui link URL berikut: [Telco customer churn (11.1.3+) on Kaggle](https://www.kaggle.com/datasets/alfathterry/telco-customer-churn-11-1-3).
-# 
-# Dataset ini terdiri dari 50 kolom/atribut, berisikan informasi mengenai sebuah perusahaan telco fiktif di California yang menyediakan layanan internet dan telepon rumah kepada 7.043 pelanggan di daerah tersebut.
-# 
-# Dataset ini dapat digunakan untuk berbagai macam hal terkait proses pembangunan machine learning prediktif untuk prediksi churn pelanggan, termasuk analisis data eksploratif (EDA) secara mendalam, prapemrosesan, hingga pemodelan prediktif dengan sistem machine learning.
-# 
-# Berikut adalah deskripsi singkat dari masing-masing fitur (kolom) dalam dataset ini.
-# * `Customer ID`: ID pengenal unik dari setiap pelanggan
-# * `Gender`: Jenis kelamin masing-masing pelanggan: Male, Female
-# * `Age`: Umur pelanggan (dalam tahun)
-# * `Senior Citizen`: Apakah pelanggan berumur 65 tahun atau lebih tua?: Yes, No
-# * `Married`: Apakah pelanggan sudah menikah?: Yes, No
-# * `Dependents`: Mengindikasikan apakah pelanggan bergantung kepada orang lain (Yes, No); misalnya anak, orang tua, kakek/nenek, dsb.
-# * `Number of Dependents`: Jumlah orang lain yang tinggal bersama pelanggan yang bersangkutan
-# * `Country`: Negara domisili pelanggan
-# * `City`: Kota domisili pelanggan
-# * `Zip Code`: Kode pos domisili pelanggan
-# * `Latitude`: Posisi tempat tinggal domisili pelanggan mengacu pada garis lintang
-# * `Longitude`: Posisi tempat tinggal domisili pelanggan mengacu pada garis bujur
-# * `Population`: Estimasi jumlah penduduk untuk seluruh area kode pos
-# * `Quarter`: Kuartal fiskal di mana data terakhir diambil
-# * `Referred a Friend`: Apakah pelanggan merekomendasikan layanan perusahaan kepada teman atau anggota keluarga lain: Yes, No
-# * `Number of Referrals`: Jumlah referral yang dihasilkan dari pelanggan yang bersangkutan
-# * `Tenure in Months`: Lama waktu pelanggan berlangganan dengan perusahaan dalam bulan
-# * `Offer`: Penawaran terakhir yang diterima dan diambil oleh pelanggan. Ini melibatkan None, Offer A, Offer B, Offer C, Offer D, dan Offer E
-# * `Phone Service`: Apakah pelanggan menggunakan layanan telepon rumah yang ditawarkan?: Yes, No
-# *  `Avg Monthly Long Distance Charges`: Biaya rata-rata pelanggan untuk pemakaian jarak jauh
-# * `Multiple Lines`: Apakah pelanggan menggunakan lebih dari satu jaringan telepon dari perusahaan yang sama?: Yes, No
-# * `Internet Service`: Jenis layanan internet yang digunakan oleh pelanggan: No, DSL, Fiber Optic, Cable
-# * `Avg Monthly GB Download`: Rata-rata volume download pelanggan dalam GB
-# * `Online Security`: Apakah pelanggan menggunakan layanan online security dari perusahaan?: Yes, No
-# * `Online Backup`: Apakah pelanggan menggunakan layanan backup data langsung dari perusahaan?: Yes, No
-# * `Device Protection Plan`: Apakah pelanggan menggunakan layanan tambahan berupa device protection plan untuk peralatan internet yang disediakan oleh perusahaan?: Yes, No
-# * `Online Security`: Apakah pelanggan menggunakan layanan tambahan berupa technical support plan dari perusahaan, dengan waktu tunggu yang lebih pendek?: Yes, No
-# * `Streaming TV`: Apakah pelanggan menggunakan layanan internet untuk mengakses siaran TV (IPTV)?: Yes, No
-# * `Streaming Movies`: Apakah pelanggan menggunakan layanan internet untuk mengakses konten film?: Yes, No
-# * `Streaming Music`: Apakah pelanggan menggunakan layanan internet untuk mengakses konten musik?: Yes, No
-# * `Unlimited Data`: Apakah pelanggan membayar biaya tambahan untuk download/upload tanpa batas?: Yes, No
-# * `Contract`: Jenis kontrak yang diambil pelanggan: Month-to-Month, One Year, Two Year
-# * `Paperless Billing`: Apakah pelanggan memilih e-billing (paperless)?: Yes, No
-# * `Payment Method`: Jenis pembayaran yang digunakan pelanggan dalam membayar tagihannya: Bank Withdrawal, Credit Card, Mailed Check
-# * `Monthly Charge`: Jumlah tagihan bulanan pelanggan untuk seluruh layanan yang digunakan
-# * `Total Charges`: Jumlah tagihan pelanggan secara keseluruhan yang dihitung pada kuartal tertentu
-# * `Total Refunds`: Jumlah pengembalian dana dari perusahaan ke pelanggan yang dihitung pada kuartal tertentu
-# * `Total Extra Data Charges`: Jumlah tagihan yang dibebankan ke pelanggan atas pemakaian data melebihi apa yang dicantumkan dalam paket (plan), pada akhir kuartal tertentu
-# * `Total Long Distance Charges`: Biaya pelanggan secara total untuk pemakaian jarak jauh
-# * `Satisfaction Score`: Rating kepuasan secara keseluruhan dari pelanggan, dari 1 (Very Unsatisfied) ke 5 (Very Satisfied)
-# * `Satisfaction Score Label`: Versi teks (String) dari kolom `Satisfaction Score`
-# * `Customer Status`: Status pelanggan pada akhir kuartal: Churned, Stayed, atau Joined
-# * `Churn Label`: Yes = Pelanggan meninggalkan perusahaan pada kuartal tertentu, No = Pelanggan masih tetap berlangganan dengan perusahaan hingga saat ini
-# * `Churn Value`: 1 = Pelanggan meninggalkan perusahaan pada kuartal tertentu, 0 = Pelanggan masih tetap berlangganan dengan perusahaan hingga saat ini. Secara langsung berhubungan dengan kolom `Churn Label`
-# * `Churn Score`: Nilai skor dalam skala 1 - 100 yang dihasilkan menggunakan IBM SPSS Modeler, ditentukan oleh banyak faktor yang diyakini menyebabkan churn. Semakin tinggi Churn Score, semakin besar kemungkinan pelanggan melakukan churn
-# * `Churn Score Category`: Kategori berdasarkan nilai `Churn Score`: 0-10, 11-20, 21-30, 31-40, 41-50, 51-60, 61-70, 71-80, 81-90, dan 91-100
-# * `CLTV`: Customer Lifetime Value, dihasilkan menggunakan rumus yang ditentukan perusahaan dan data yang sudah ada. Semakin tinggi nilai CLTV, semakin bernilai pelanggan tersebut
-# * `CLTV Category`: Kategori berdasarkan nilai `CLTV`: 2000-2500, 2501-3000, 3001-3500, 3501-4000, 4001-4500, 4501-5000, 5001-5500, 5501-6000, 6001-6500, dan 6501-7000
-# * `Churn Category`: Kategori tingkat tinggi mengenai alasan pelanggan melakukan churn: Attitude, Competitor, Dissatisfaction, Other, Price
-# * `Churn Reason`: Alasan pelanggan melakukan churn secara lebih detail, di luar poin jawaban yang tersedia pada `Churn Category`
+1. **Sumber Dataset**:  
+   Dataset dapat diperoleh dari berbagai sumber, seperti public repositories (*Kaggle*, *UCI ML Repository*, *Open Data*) atau data primer yang Anda kumpulkan sendiri.
 
-# # **2. Import Library**
+Untuk proyek **Customer Churn Analytics** ini, dataset yang digunakan adalah **Telco customer churn (11.1.3+)** dari Al Fath Terry, yang filenya bisa di-download secara langsung dari Kaggle melalui link URL berikut: [Telco customer churn (11.1.3+) on Kaggle](https://www.kaggle.com/datasets/alfathterry/telco-customer-churn-11-1-3).
 
-# Pada tahap ini, Anda perlu mengimpor beberapa pustaka (library) Python yang dibutuhkan untuk analisis data dan pembangunan model machine learning atau deep learning.
+Dataset ini terdiri dari 50 kolom/atribut, berisikan informasi mengenai sebuah perusahaan telco fiktif di California yang menyediakan layanan internet dan telepon rumah kepada 7.043 pelanggan di daerah tersebut.
 
-# In[1]:
+Dataset ini dapat digunakan untuk berbagai macam hal terkait proses pembangunan machine learning prediktif untuk prediksi churn pelanggan, termasuk analisis data eksploratif (EDA) secara mendalam, prapemrosesan, hingga pemodelan prediktif dengan sistem machine learning.
 
+Berikut adalah deskripsi singkat dari masing-masing fitur (kolom) dalam dataset ini.
+* `Customer ID`: ID pengenal unik dari setiap pelanggan
+* `Gender`: Jenis kelamin masing-masing pelanggan: Male, Female
+* `Age`: Umur pelanggan (dalam tahun)
+* `Senior Citizen`: Apakah pelanggan berumur 65 tahun atau lebih tua?: Yes, No
+* `Married`: Apakah pelanggan sudah menikah?: Yes, No
+* `Dependents`: Mengindikasikan apakah pelanggan bergantung kepada orang lain (Yes, No); misalnya anak, orang tua, kakek/nenek, dsb.
+* `Number of Dependents`: Jumlah orang lain yang tinggal bersama pelanggan yang bersangkutan
+* `Country`: Negara domisili pelanggan
+* `City`: Kota domisili pelanggan
+* `Zip Code`: Kode pos domisili pelanggan
+* `Latitude`: Posisi tempat tinggal domisili pelanggan mengacu pada garis lintang
+* `Longitude`: Posisi tempat tinggal domisili pelanggan mengacu pada garis bujur
+* `Population`: Estimasi jumlah penduduk untuk seluruh area kode pos
+* `Quarter`: Kuartal fiskal di mana data terakhir diambil
+* `Referred a Friend`: Apakah pelanggan merekomendasikan layanan perusahaan kepada teman atau anggota keluarga lain: Yes, No
+* `Number of Referrals`: Jumlah referral yang dihasilkan dari pelanggan yang bersangkutan
+* `Tenure in Months`: Lama waktu pelanggan berlangganan dengan perusahaan dalam bulan
+* `Offer`: Penawaran terakhir yang diterima dan diambil oleh pelanggan. Ini melibatkan None, Offer A, Offer B, Offer C, Offer D, dan Offer E
+* `Phone Service`: Apakah pelanggan menggunakan layanan telepon rumah yang ditawarkan?: Yes, No
+*  `Avg Monthly Long Distance Charges`: Biaya rata-rata pelanggan untuk pemakaian jarak jauh
+* `Multiple Lines`: Apakah pelanggan menggunakan lebih dari satu jaringan telepon dari perusahaan yang sama?: Yes, No
+* `Internet Service`: Jenis layanan internet yang digunakan oleh pelanggan: No, DSL, Fiber Optic, Cable
+* `Avg Monthly GB Download`: Rata-rata volume download pelanggan dalam GB
+* `Online Security`: Apakah pelanggan menggunakan layanan online security dari perusahaan?: Yes, No
+* `Online Backup`: Apakah pelanggan menggunakan layanan backup data langsung dari perusahaan?: Yes, No
+* `Device Protection Plan`: Apakah pelanggan menggunakan layanan tambahan berupa device protection plan untuk peralatan internet yang disediakan oleh perusahaan?: Yes, No
+* `Online Security`: Apakah pelanggan menggunakan layanan tambahan berupa technical support plan dari perusahaan, dengan waktu tunggu yang lebih pendek?: Yes, No
+* `Streaming TV`: Apakah pelanggan menggunakan layanan internet untuk mengakses siaran TV (IPTV)?: Yes, No
+* `Streaming Movies`: Apakah pelanggan menggunakan layanan internet untuk mengakses konten film?: Yes, No
+* `Streaming Music`: Apakah pelanggan menggunakan layanan internet untuk mengakses konten musik?: Yes, No
+* `Unlimited Data`: Apakah pelanggan membayar biaya tambahan untuk download/upload tanpa batas?: Yes, No
+* `Contract`: Jenis kontrak yang diambil pelanggan: Month-to-Month, One Year, Two Year
+* `Paperless Billing`: Apakah pelanggan memilih e-billing (paperless)?: Yes, No
+* `Payment Method`: Jenis pembayaran yang digunakan pelanggan dalam membayar tagihannya: Bank Withdrawal, Credit Card, Mailed Check
+* `Monthly Charge`: Jumlah tagihan bulanan pelanggan untuk seluruh layanan yang digunakan
+* `Total Charges`: Jumlah tagihan pelanggan secara keseluruhan yang dihitung pada kuartal tertentu
+* `Total Refunds`: Jumlah pengembalian dana dari perusahaan ke pelanggan yang dihitung pada kuartal tertentu
+* `Total Extra Data Charges`: Jumlah tagihan yang dibebankan ke pelanggan atas pemakaian data melebihi apa yang dicantumkan dalam paket (plan), pada akhir kuartal tertentu
+* `Total Long Distance Charges`: Biaya pelanggan secara total untuk pemakaian jarak jauh
+* `Satisfaction Score`: Rating kepuasan secara keseluruhan dari pelanggan, dari 1 (Very Unsatisfied) ke 5 (Very Satisfied)
+* `Satisfaction Score Label`: Versi teks (String) dari kolom `Satisfaction Score`
+* `Customer Status`: Status pelanggan pada akhir kuartal: Churned, Stayed, atau Joined
+* `Churn Label`: Yes = Pelanggan meninggalkan perusahaan pada kuartal tertentu, No = Pelanggan masih tetap berlangganan dengan perusahaan hingga saat ini
+* `Churn Value`: 1 = Pelanggan meninggalkan perusahaan pada kuartal tertentu, 0 = Pelanggan masih tetap berlangganan dengan perusahaan hingga saat ini. Secara langsung berhubungan dengan kolom `Churn Label`
+* `Churn Score`: Nilai skor dalam skala 1 - 100 yang dihasilkan menggunakan IBM SPSS Modeler, ditentukan oleh banyak faktor yang diyakini menyebabkan churn. Semakin tinggi Churn Score, semakin besar kemungkinan pelanggan melakukan churn
+* `Churn Score Category`: Kategori berdasarkan nilai `Churn Score`: 0-10, 11-20, 21-30, 31-40, 41-50, 51-60, 61-70, 71-80, 81-90, dan 91-100
+* `CLTV`: Customer Lifetime Value, dihasilkan menggunakan rumus yang ditentukan perusahaan dan data yang sudah ada. Semakin tinggi nilai CLTV, semakin bernilai pelanggan tersebut
+* `CLTV Category`: Kategori berdasarkan nilai `CLTV`: 2000-2500, 2501-3000, 3001-3500, 3501-4000, 4001-4500, 4501-5000, 5001-5500, 5501-6000, 6001-6500, dan 6501-7000
+* `Churn Category`: Kategori tingkat tinggi mengenai alasan pelanggan melakukan churn: Attitude, Competitor, Dissatisfaction, Other, Price
+* `Churn Reason`: Alasan pelanggan melakukan churn secara lebih detail, di luar poin jawaban yang tersedia pada `Churn Category`
+
+# **2. Import Library**
+
+Pada tahap ini, Anda perlu mengimpor beberapa pustaka (library) Python yang dibutuhkan untuk analisis data dan pembangunan model machine learning atau deep learning.
+"""
 
 # Import library yang diperlukan
 # Library pengolahan & visualisasi data
-from IPython.display import display
+import gdown
+import zipfile
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Library transformasi data
 import numpy as np
-from scipy.stats import chi2_contingency
+import joblib
+from scipy import stats
+from scipy.stats import chi2_contingency, randint
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.preprocessing import StandardScaler
@@ -94,60 +93,43 @@ from sklearn.decomposition import PCA
 import warnings
 warnings.filterwarnings("ignore")
 
+"""# **3. Memuat Dataset**
 
-# # **3. Memuat Dataset**
+Pada tahap ini, Anda perlu memuat dataset ke dalam notebook. Jika dataset dalam format CSV, Anda bisa menggunakan pustaka pandas untuk membacanya. Pastikan untuk mengecek beberapa baris awal dataset untuk memahami strukturnya dan memastikan data telah dimuat dengan benar.
 
-# Pada tahap ini, Anda perlu memuat dataset ke dalam notebook. Jika dataset dalam format CSV, Anda bisa menggunakan pustaka pandas untuk membacanya. Pastikan untuk mengecek beberapa baris awal dataset untuk memahami strukturnya dan memastikan data telah dimuat dengan benar.
-# 
-# Jika dataset berada di Google Drive, pastikan Anda menghubungkan Google Drive ke Colab terlebih dahulu. Setelah dataset berhasil dimuat, langkah berikutnya adalah memeriksa kesesuaian data dan siap untuk dianalisis lebih lanjut.
-# 
-# Jika dataset berupa unstructured data, silakan sesuaikan dengan format seperti kelas Machine Learning Pengembangan atau Machine Learning Terapan
+Jika dataset berada di Google Drive, pastikan Anda menghubungkan Google Drive ke Colab terlebih dahulu. Setelah dataset berhasil dimuat, langkah berikutnya adalah memeriksa kesesuaian data dan siap untuk dianalisis lebih lanjut.
 
-# In[2]:
+Jika dataset berupa unstructured data, silakan sesuaikan dengan format seperti kelas Machine Learning Pengembangan atau Machine Learning Terapan
 
+"""
 
 # Mengambil file dataset 'telco' untuk disimpan sebagai dataframe 'df_churn'
 file_path = "dataset_raw/telco.csv"
 
 df_churn = pd.read_csv(file_path)
 
-
-# In[3]:
-
-
 # ===== Menampilkan lima baris data pertama dengan fungsi .head() =====
 df_churn.head()
 
+"""# **4. Exploratory Data Analysis (EDA)**
 
-# # **4. Exploratory Data Analysis (EDA)**
-# 
-# Pada tahap ini, Anda akan melakukan **Exploratory Data Analysis (EDA)** untuk memahami karakteristik dataset.
-# 
-# Tujuan dari EDA adalah untuk memperoleh wawasan awal yang mendalam mengenai data dan menentukan langkah selanjutnya dalam analisis atau pemodelan.
+Pada tahap ini, Anda akan melakukan **Exploratory Data Analysis (EDA)** untuk memahami karakteristik dataset.
 
-# In[4]:
-
+Tujuan dari EDA adalah untuk memperoleh wawasan awal yang mendalam mengenai data dan menentukan langkah selanjutnya dalam analisis atau pemodelan.
+"""
 
 # ===== Mengecek tipe data dari setiap kolom pada dataset =====
 print(df_churn.dtypes)
 
-
-# In[5]:
-
-
 # ===== Mengecek isi nilai dataframe =====
-print(f"\n\nTerdapat sebanyak: \n{df_churn.shape[1]} kolom dan {df_churn.shape[0]} baris dalam dataframe ini.")
+print(f"Terdapat sebanyak: \n{df_churn.shape[1]} kolom dan {df_churn.shape[0]} baris dalam dataframe ini.")
 print(f"{df_churn['Customer ID'].duplicated().sum().sum()} baris data yang duplikat.")
 
 # ===== Memeriksa adanya missing value pada setiap kolom =====
 missing_counts = df_churn.isna().sum()
 missing_counts[missing_counts > 0].sort_values(ascending=False)
 print(("=" * 50) + "\nKolom dengan missing value:")
-print(f"{missing_counts}\n\n")
-
-
-# In[6]:
-
+print(f"{missing_counts}")
 
 # ===== Melihat gambaran statistik dari kolom kategorikal =====
 cat_cols = df_churn.select_dtypes(include=object).columns.tolist()
@@ -163,10 +145,6 @@ for col in cat_cols:
 display(df_churn.select_dtypes(include=object).describe())
 print()
 display(df_summary)
-
-
-# In[7]:
-
 
 # ====== Membuat fungsi helper untuk visualisasi =====
 # 1) Fungsi helper bar chart
@@ -213,10 +191,6 @@ def plot_box(data, x_col, y_col=None, hue=None, title="Box Plot", xlabel="X-axis
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
 
-
-# In[8]:
-
-
 # ===== Eksplorasi Churn Rate =====
 # Filter data Churn berdasarkan status Churn
 churn_rate = (
@@ -252,10 +226,6 @@ plot_pie(
 plt.tight_layout()
 plt.show()
 
-
-# In[9]:
-
-
 # ===== Eksplorasi Churn Rate berdasarkan faktor demografi selain usia dan geografi =====
 # Membuat fitur untuk flag hanya pada Churn = Yes
 df_churn["Churn_flag"] = (
@@ -285,10 +255,6 @@ for i, col in enumerate(demography_features):
 
 plt.tight_layout()
 plt.show()
-
-
-# In[10]:
-
 
 # ===== Eksplorasi Churn Count berdasarkan Kota (hanya 10 tertinggi dan terendah ditampilkan) =====
 # Mendapatkan Churn Count untuk setiap Kota
@@ -339,10 +305,6 @@ plot_bar(
 plt.tight_layout()
 plt.show()
 
-
-# In[11]:
-
-
 # ===== Eksplorasi Churn Rate berdasarkan jenis produk yang ditawarkan =====
 # Menentukan fitur terkait jenis produk langganan
 product_features = [
@@ -369,10 +331,6 @@ for i, col in enumerate(product_features):
 plt.tight_layout()
 plt.show()
 
-
-# In[12]:
-
-
 # ===== Eksplorasi Churn Rate berdasarkan metode langganan dan bayar =====
 # Menentukan fitur terkait metode langganan dan bayar
 subscription_payment_features = [
@@ -396,10 +354,6 @@ for i, col in enumerate(subscription_payment_features):
 
 plt.tight_layout()
 plt.show()
-
-
-# In[13]:
-
 
 # ===== Eksplorasi Distribusi Churn berdasarkan Fitur Numerik =====
 # Sortir hanya pada pelanggan yang melakukan churn
@@ -435,10 +389,6 @@ for ax, col in zip(axes, numerical_cols):
 plt.tight_layout()
 plt.show()
 
-
-# In[14]:
-
-
 # ===== Eksplorasi Distribusi Outlier pada Fitur Numerik =====
 # Visualisasi dengan box plot (untuk mendeteksi outlier)
 fig, axes = plt.subplots(4, 3, figsize=(16, 8))
@@ -458,10 +408,6 @@ for i, col in enumerate(numerical_cols):
 plt.tight_layout()
 plt.show()
 
-
-# In[15]:
-
-
 # ===== Eksplorasi Korelasi antar Fitur Numerik =====
 # Menentukan fitur numerik dalam dataset 'df_churn'
 df_churn_num_only = df_churn[numerical_cols]
@@ -471,10 +417,6 @@ fig, ax = plt.subplots(figsize=(10, 5))
 corr = df_churn_num_only.corr()
 sns.heatmap(corr, cmap='rocket', annot=True)
 plt.show()
-
-
-# In[16]:
-
 
 # ===== Menentukan fitur dengan multikolinearitas tinggi =====
 # Sortir fitur dengan multikolinearitas tinggi (> 0.6)
@@ -487,32 +429,29 @@ strong_pos_corr = corr_unstacked[
 printed_pairs = set()
 
 # Menampilkan fitur dengan multikolinearitas tinggi
-print("\n\nFitur dengan multikolineritas tinggi:")
+print("Fitur dengan multikolineritas tinggi:")
 for(col1, col2), corr_value in strong_pos_corr.items():
     pair = tuple(sorted((col1, col2)))
     if pair not in printed_pairs:
         print(f"'{col1}' dan '{col2}': {corr_value:.4f}")
         printed_pairs.add(pair)
 
+"""# **5. Data Preprocessing**
 
-# # **5. Data Preprocessing**
+Pada tahap ini, data preprocessing adalah langkah penting untuk memastikan kualitas data sebelum digunakan dalam model machine learning.
 
-# Pada tahap ini, data preprocessing adalah langkah penting untuk memastikan kualitas data sebelum digunakan dalam model machine learning.
-# 
-# Jika Anda menggunakan data teks, data mentah sering kali mengandung nilai kosong, duplikasi, atau rentang nilai yang tidak konsisten, yang dapat memengaruhi kinerja model. Oleh karena itu, proses ini bertujuan untuk membersihkan dan mempersiapkan data agar analisis berjalan optimal.
-# 
-# Berikut adalah tahapan-tahapan yang bisa dilakukan, tetapi **tidak terbatas** pada:
-# 1. Menghapus atau Menangani Data Kosong (Missing Values)
-# 2. Menghapus Data Duplikat
-# 3. Normalisasi atau Standarisasi Fitur
-# 4. Deteksi dan Penanganan Outlier
-# 5. Encoding Data Kategorikal
-# 6. Binning (Pengelompokan Data)
-# 
-# Cukup sesuaikan dengan karakteristik data yang kamu gunakan yah. Khususnya ketika kami menggunakan data tidak terstruktur.
+Jika Anda menggunakan data teks, data mentah sering kali mengandung nilai kosong, duplikasi, atau rentang nilai yang tidak konsisten, yang dapat memengaruhi kinerja model. Oleh karena itu, proses ini bertujuan untuk membersihkan dan mempersiapkan data agar analisis berjalan optimal.
 
-# In[17]:
+Berikut adalah tahapan-tahapan yang bisa dilakukan, tetapi **tidak terbatas** pada:
+1. Menghapus atau Menangani Data Kosong (Missing Values)
+2. Menghapus Data Duplikat
+3. Normalisasi atau Standarisasi Fitur
+4. Deteksi dan Penanganan Outlier
+5. Encoding Data Kategorikal
+6. Binning (Pengelompokan Data)
 
+Cukup sesuaikan dengan karakteristik data yang kamu gunakan yah. Khususnya ketika kami menggunakan data tidak terstruktur.
+"""
 
 # ===== Chi-square Test =====
 categorical_cols = df_churn.select_dtypes(include="object").columns.tolist()
@@ -520,7 +459,6 @@ chi_statistic = []
 p_value = []
 vars_rm = []
 
-print()
 for i in df_churn[categorical_cols]:
     observed = pd.crosstab(index=df_churn["Churn Label"], columns=df_churn[i])
     stat, p, dof, expected = chi2_contingency(observed)
@@ -534,10 +472,6 @@ for i in df_churn[categorical_cols]:
 if vars_rm:
     print("\nVariabel independen yang perlu dihilangkan (p < 0.05):")
     print(vars_rm)
-
-
-# In[18]:
-
 
 # ===== Feature Selection =====
 # Menghilangkan fitur yang tidak relevan dengan proyek
@@ -553,10 +487,6 @@ df_churn_curated = df_churn.drop(irrelevant_cols, axis=1, errors='ignore')
 # Menghilangkan fitur dengan tingkat signifikansi (p-value) < 0.05
 df_churn_curated = df_churn_curated.drop(vars_rm, axis=1, errors='ignore')
 
-
-# In[19]:
-
-
 # ===== Handling Data Missing Value =====
 # Mendapatkan fitur yang berisikan missing values
 missing_value_cols = ["Offer", "Internet Type"]
@@ -564,10 +494,6 @@ missing_value_cols = ["Offer", "Internet Type"]
 # Mengisi data missing values dengan nilai "No"
 for col in missing_value_cols:
     df_churn_curated[col] = df_churn_curated[col].fillna(value="No")
-
-
-# In[20]:
-
 
 # ===== Penanganan Outlier dengan Metode IQR dengan Winsorization =====
 numerical_cols = df_churn_curated.select_dtypes(include='number').columns.tolist()
@@ -585,10 +511,6 @@ for col in numerical_cols:
         df_churn_curated[col]
         .clip(lower=lower_bound, upper=upper_bound)
     )
-
-
-# In[21]:
-
 
 # ===== Eksplorasi Distribusi Outlier pada Fitur Numerik pasca Outlier Handling =====
 # Visualisasi dengan box plot (untuk mendeteksi outlier)
@@ -611,10 +533,6 @@ for i in range(-2, 0):
 plt.tight_layout()
 plt.show()
 
-
-# In[22]:
-
-
 # ===== Log Transformation =====
 # Memeriksa variabel/fitur dengan skewness > 0.66
 MAX_SKEW_THRESHOLD = 0.66
@@ -627,15 +545,11 @@ df_skew_cols = pd.DataFrame(
 )
 
 # Menerapkan log-transformation pada variabel/fitur dengan skewness > 0.66
-print(f"\n\nVariabel/fitur dengan skewness > 0.66: \n\n{df_skew_cols}")
+print(f"Variabel/fitur dengan skewness > 0.66: \n\n{df_skew_cols}")
 for col in df_skew_cols.index:
     df_churn_curated[col] = np.log1p(df_churn_curated[col])
     df_churn_curated[col] = df_churn_curated[col].replace([np.inf, -np.inf], np.nan)
     df_churn_curated[col] = df_churn_curated[col].fillna(0)
-
-
-# In[23]:
-
 
 # ===== Data splitting menjadi 80% Data Latih + 20% Data Uji =====
 # Mengambil rasio data uji
@@ -653,11 +567,7 @@ df_train.reset_index(drop=True, inplace=True)
 df_test.reset_index(drop=True, inplace=True)
 
 # Menampilkan jumlah sampel pada data latih dan data uji
-print(f"\n\nJumlah sampel data latih: {len(df_train)} baris\nJumlah sampel data uji: {len(df_test)}")
-
-
-# In[24]:
-
+print(f"Jumlah sampel data latih: {len(df_train)} baris\nJumlah sampel data uji: {len(df_test)}")
 
 # ===== Undersampling pada Kelas Mayoritas =====
 # Menentukan fitur target
@@ -696,64 +606,8 @@ df_train_undersampled = df_train_undersampled.sample(
 ).reset_index(drop=True)
 
 # Menampilkan distribusi data latih setelah undersampling
-print("\n\nDistribusi Data Latih seteleh Undersampling")
+print("Distribusi Data Latih seteleh Undersampling")
 print(df_train_undersampled["Churn Label"].value_counts())
-
-
-# In[25]:
-
-
-# ===== Standarisasi Nilai dengan StandardScaler =====
-# Fungsi helper untuk standarisasi fitur numerik
-def scale_num_col(columns, df, df_test=None):
-    if df_test is not None:
-        df = df.copy()
-        df_test = df_test.copy()
-        for column in columns:
-            scaler = StandardScaler()
-            X = np.asanyarray(df[column])
-            X = X.reshape(-1, 1)
-            scaler.fit(X)
-            df["{}".format(column)] = scaler.transform(X)
-
-            X_test = np.asanyarray(df_test[column])
-            X_test = X_test.reshape(-1, 1)
-            df_test["{}".format(column)] = scaler.transform(X_test)
-        return df, df_test
-
-    else:
-        df = df.copy()
-        for column in columns:
-            scaler = StandardScaler()
-            X = np.asanyarray(df[column])
-            X = X.reshape(-1, 1)
-            scaler.fit(X)
-            df["{}".format(column)] = scaler.transform(X)
-        return df
-
-
-# Menjalankan proses standarisasi pada data latih dan data uji
-df_train_new, df_test_new = scale_num_col(numerical_cols, df_train_undersampled, df_test)
-
-
-# In[26]:
-
-
-# ===== Manual Encoding pada Fitur Target =====
-# Meng-encode fitur target `Churn Label` pada data latih dan data uji
-df_train_new["Churn Label"] = (
-    df_train_new["Churn Label"]
-    .apply(lambda x: 1 if x == "Yes" else 0)
-)
-
-df_test_new["Churn Label"] = (
-    df_test_new["Churn Label"]
-    .apply(lambda x: 1 if x == "Yes" else 0)
-)
-
-
-# In[27]:
-
 
 # ===== Encoding Fitur Prediktor dengan One-Hot Encoder =====
 # Fungsi helper untuk One-Hot Encoding
@@ -771,6 +625,8 @@ def encode_cat_col(columns, df, df_test=None):
 
             # Menyamakan struktur kolom train-test
             df, df_test = df.align(df_test, join="left", axis=1, fill_value=0)
+            feature_columns = df.columns.tolist()
+            joblib.dump(feature_columns, "preprocessing/encoder/predictor_encoder.joblib")
 
         return df, df_test
 
@@ -779,6 +635,8 @@ def encode_cat_col(columns, df, df_test=None):
         for column in columns:
             ohe = pd.get_dummies(df[column], prefix=column).astype(int)
             df = pd.concat([df.drop(columns=[column]), ohe], axis=1)
+            feature_columns = df.columns.tolist()
+            joblib.dump(feature_columns, "preprocessing/encoder/predictor_encoder.joblib")
 
         return df
 
@@ -792,11 +650,80 @@ categorical_cols = [
     'Contract', 'Paperless Billing', 'Payment Method'
 ]
 
-df_train_new, df_test_new = encode_cat_col(categorical_cols, df_train_new, df_test_new)
+df_train_new, df_test_new = encode_cat_col(
+    columns=categorical_cols,
+    df=df_train_undersampled,
+    df_test=df_test
+)
+
+# ===== Encoding Fitur Target dengan Label Encoder =====
+# Fungsi helper untuk Label Encoding
+def encode_target_col(target_column, df, df_test=None):
+    if df_test is not None:
+        df = df.copy()
+        df_test = df_test.copy()
+
+        le = LabelEncoder()
+        df[target_column] = le.fit_transform(df[target_column])
+        joblib.dump(le, "preprocessing/encoder/target_encoder.joblib")
+
+        df_test[target_column] = le.transform(df_test[target_column])
+
+        return df, df_test
+
+    else:
+        df = df.copy()
+        le = LabelEncoder()
+        df[target_column] = le.fit_transform(df[target_column])
+        joblib.dump(le, "preprocessing/encoder/target_encoder.joblib")
+
+        return df
 
 
-# In[28]:
+# Meng-encode fitur target `Churn Label` pada data latih dan data uji
+df_train_new, df_test_new = encode_target_col(
+    target_column="Churn Label",
+    df=df_train_new,
+    df_test=df_test_new
+)
 
+# ===== Standarisasi Nilai dengan StandardScaler =====
+# Fungsi helper untuk standarisasi fitur numerik
+def scale_num_col(columns, df, df_test=None):
+    if df_test is not None:
+        df = df.copy()
+        df_test = df_test.copy()
+        for column in columns:
+            scaler = StandardScaler()
+            X = np.asanyarray(df[column])
+            X = X.reshape(-1, 1)
+            scaler.fit(X)
+            df[column] = scaler.transform(X)
+            joblib.dump(scaler, f"preprocessing/scaler/{column}_scaler.joblib")
+
+            X_test = np.asanyarray(df_test[column])
+            X_test = X_test.reshape(-1, 1)
+            df_test[column] = scaler.transform(X_test)
+        return df, df_test
+
+    else:
+        df = df.copy()
+        for column in columns:
+            scaler = StandardScaler()
+            X = np.asanyarray(df[column])
+            X = X.reshape(-1, 1)
+            scaler.fit(X)
+            df[column] = scaler.transform(X)
+            joblib.dump(scaler, f"preprocessing/scaler/{column}_scaler.joblib")
+        return df
+
+
+# Menjalankan proses standarisasi pada data latih dan data uji
+df_train_new, df_test_new = scale_num_col(
+    columns=numerical_cols,
+    df=df_train_new,
+    df_test=df_test_new
+)
 
 # ===== Reduksi Dimensi dengan PCA =====
 # Membuat dataframe baru bernama `df_train_pca` dan `df_test_pca`
@@ -825,13 +752,10 @@ plt.xlabel('Principal component index')
 plt.legend(loc='best')
 plt.show()
 
-
-# In[29]:
-
-
 # Menerapkan PCA pada data latih dan data uji
 pca = PCA(n_components=2, random_state=126)
 pca.fit(df_train_pca[pca_cols])
+joblib.dump(pca, "preprocessing/pca/pca.joblib")
 
 train_princ_comp = pca.transform(df_train_pca[pca_cols])
 df_train_pca[["Pc_1", "Pc_2"]] = pd.DataFrame(train_princ_comp, columns=["Pc_1", "Pc_2"])
@@ -841,23 +765,11 @@ test_princ_comp = pca.transform(df_test_pca[pca_cols])
 df_test_pca[["Pc_1", "Pc_2"]] = pd.DataFrame(test_princ_comp, columns=["Pc_1", "Pc_2"])
 df_test_pca.drop(columns=pca_cols, axis=1, inplace=True)
 
-
-# In[30]:
-
-
 # Menampilkan data latih hasil PCA
 df_train_pca.head()
 
-
-# In[31]:
-
-
 # Menampilkan data uji hasil PCA
 df_test_pca.head()
-
-
-# In[32]:
-
 
 # ===== Meng-export dataset hasil transformasi =====
 # Membuat fungsi helper untuk menyimpan dataframe ke dalam file .csv
@@ -871,11 +783,9 @@ def save_to_csv(data, file_path):
 
 
 # Menyiapkan direktori file untuk menyimpan dataframe ke dalam file .csv
-train_pca_file = "preprocessing/dataset_preprocessed/train_pca.csv"
-test_pca_file = "preprocessing/dataset_preprocessed/test_pca.csv"
+train_pca_file = "preprocessing/telco_preprocessing/train_pca.csv"
+test_pca_file = "preprocessing/telco_preprocessing/test_pca.csv"
 
 # Menyimpan dataframe `df_train_pca` dan `df_test_pca` sebagai file .csv
-print("\n")
 save_to_csv(df_train_pca, train_pca_file)
 save_to_csv(df_test_pca, test_pca_file)
-
