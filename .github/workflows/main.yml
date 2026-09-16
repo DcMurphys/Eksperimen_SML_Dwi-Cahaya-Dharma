@@ -34,20 +34,20 @@ jobs:
     - name: 4) Run preprocessing script file 
       run: python preprocessing/automate_Dwi-Cahaya-Dharma.py 
       
-    - name: 5) Upload scaler and PCA artifacts
+    - name: 5) Upload scaler, encoder, and PCA artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: preprocessing-scaler-pca
+        name: scaler-pca-encoder-artifacts
         path: |
           preprocessing/scaler/
           preprocessing/pca/
+          preprocessing/encoder/
           
     - name: 6) Commit and push remaining processed files from preprocessing script file
       run: | 
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
 
-        git add preprocessing/encoder/
         git add preprocessing/telco_preprocessing/
 
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Update preprocessed datasets and encoders" && git push)
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update preprocessed datasets" && git push)
