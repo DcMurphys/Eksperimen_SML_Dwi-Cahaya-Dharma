@@ -31,7 +31,7 @@ jobs:
     - name: 4) Run preprocessing script file 
       run: python preprocessing/automate_Dwi-Cahaya-Dharma.py 
                
-    - name: 5) Commit and push preprocessed artifacts from preprocessing script file
+    - name: 5) Commit and push preprocessed datasets and artifacts from preprocessing script file
       run: | 
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
